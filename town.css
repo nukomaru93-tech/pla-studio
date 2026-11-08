@@ -1,0 +1,306 @@
+/* PLA STUDIO の町（HOMEのマップ） */
+
+/* ---------- 町の箱 ---------- */
+.town-wrap { position: relative; margin: 10px auto 0; max-width: 900px; }
+.town-frame {
+  position: relative; border: 4px solid var(--ink, #2a2140); border-radius: 30px; overflow: hidden;
+  box-shadow: 8px 8px 0 var(--ink, #2a2140); background: #8fdcff;
+}
+.town { display: block; width: 100%; height: auto; user-select: none; -webkit-user-select: none; }
+.town-sp { display: none; }
+@media (max-width: 719px) {
+  .town-pc { display: none; }
+  .town-sp { display: block; }
+  .town-frame { border-radius: 24px; }
+}
+
+/* ---------- 文字 ---------- */
+.town text { font-family: 'M PLUS Rounded 1c', sans-serif; font-weight: 800; pointer-events: none; }
+.sign-text { fill: #fff; paint-order: stroke; stroke: #2a2140; stroke-width: 4px; }
+.sign-dark { fill: #2a2140; }
+.screen-text { fill: #52e5ff; font-family: 'Baloo 2', sans-serif !important; }
+.lamp-text { fill: #ff5a4f; font-family: 'Baloo 2', sans-serif !important; }
+.onair-text { fill: #6b3346; font-family: 'Baloo 2', sans-serif !important; transition: fill .2s; }
+.board-new { fill: #ff5a4f; font-family: 'Baloo 2', sans-serif !important; paint-order: stroke; stroke: #fff; stroke-width: 5px; }
+.spark-text { fill: #ffd23f; paint-order: stroke; stroke: #2a2140; stroke-width: 3px; }
+.note-text { fill: #a45cf0; paint-order: stroke; stroke: #fff; stroke-width: 4px; }
+.zzz { fill: #7a6fa0; }
+
+/* ---------- 空と時間 ---------- */
+.sky1 { stop-color: #8fdcff; } .sky2 { stop-color: #e6f8ff; }
+.win { fill: #d9f3ff; transition: fill .6s; }
+.stars, .moon { display: none; }
+body.t-morning .sky1 { stop-color: #ffd6a8; } body.t-morning .sky2 { stop-color: #fff4d8; }
+body.t-evening .sky1 { stop-color: #ff9a6b; } body.t-evening .sky2 { stop-color: #ffd29a; }
+body.t-night .sky1 { stop-color: #1d1640; } body.t-night .sky2 { stop-color: #4b3a8a; }
+body.t-night .stars { display: block; }
+body.t-night .stars circle { animation: twinkle 2.4s ease-in-out infinite; }
+body.t-night .sun { display: none; }
+body.t-night .moon { display: block; }
+body.t-night .win, body.t-evening .win { fill: #ffe27a; }
+body.t-night .town path[fill="#a8e58a"] { fill: #6fae6a; }
+body.t-night .town-frame { background: #1d1640; }
+
+/* ---------- 建物 ---------- */
+.bld { cursor: pointer; outline: none; }
+.bld-in { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .25s cubic-bezier(.3, 1.6, .5, 1); }
+.bld-in { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1), filter .3s; }
+/* 大きくするのは「見た目のコピー」だけ（本物はそのまま＝クリックの場所がずれない） */
+.town .hover-clone { transform-box: fill-box; transform-origin: 50% 100%; transform: translateY(-10px) scale(1.28);
+  animation: clonein .3s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes clonein { from { transform: none; } to { transform: translateY(-10px) scale(1.28); } }
+.town.hovering .bld:not(.is-hover) .bld-in { filter: saturate(.55) brightness(1.06) opacity(.8); }
+.bld:focus-visible .sign rect { stroke: #ff9a1f; stroke-width: 6px; }
+.bld.hop .bld-in { animation: hop .55s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes hop { 0% { transform: none; } 30% { transform: translateY(-26px) scale(1.06, .96); } 60% { transform: translateY(0) scale(1.05, .92); } 100% { transform: none; } }
+.door-l, .door-r { transition: transform .4s ease; transform-box: fill-box; }
+.door-l { transform-origin: 0 50%; } .door-r { transform-origin: 100% 50%; }
+.bld.open .door-l, .bld.open .door-r { transform: scaleX(.12); }
+.bld.visited .sign rect { stroke-dasharray: none; }
+.bld .stamp-mark { display: none; }
+.bld.visited .stamp-mark { display: block; }
+
+/* 本部：旗と王冠 */
+.flag { transform-box: fill-box; transform-origin: 0 50%; animation: flag 1.6s ease-in-out infinite; }
+@keyframes flag { 0%, 100% { transform: skewY(0) scaleX(1); } 50% { transform: skewY(6deg) scaleX(.85); } }
+.crown { cursor: pointer; transform-box: fill-box; transform-origin: 50% 70%; }
+.crown-sparks { opacity: 0; }
+.crown.spin { animation: crownspin 1s cubic-bezier(.3, 1.4, .5, 1); }
+.crown.spin .crown-sparks { animation: sparks 1s ease-out; }
+@keyframes crownspin { 0% { transform: none; } 40% { transform: translateY(-30px) rotateY(180deg); } 100% { transform: rotateY(360deg); } }
+@keyframes sparks { 0% { opacity: 0; transform: scale(.5); } 40% { opacity: 1; } 100% { opacity: 0; transform: scale(1.3); } }
+
+/* AI研究所 */
+.robot-arm { opacity: 0; transform-box: fill-box; transform-origin: 100% 100%; transform: scale(.2); transition: .35s cubic-bezier(.3, 1.6, .5, 1); }
+.bld-ai.react .robot-arm { opacity: 1; transform: scale(1) rotate(-10deg); }
+.bld-ai.react .screen-text { fill: #ffd23f; }
+.dish { transform-box: fill-box; transform-origin: 30% 100%; }
+.bld-ai.react .dish { animation: wobble .8s ease-in-out 2; }
+@keyframes wobble { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-14deg); } 75% { transform: rotate(10deg); } }
+
+/* 収録スタジオ */
+.rec-dot { opacity: .35; }
+.bld-studio.react .rec-dot { opacity: 1; animation: blink .5s steps(2) infinite; }
+.notes text { opacity: 0; }
+.bld-studio.react .notes text { animation: note 1.6s ease-out forwards; }
+@keyframes note { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-60px) rotate(15deg); } }
+
+/* ゲーム開発室 */
+.peek { opacity: 0; transition: opacity .3s; }
+.bld-game.peeking .peek { opacity: 1; }
+.hammer { opacity: 0; transform-box: fill-box; transform-origin: 80% 80%; }
+.bld-game.react .hammer { animation: hammer .3s ease-in-out 5 alternate; }
+@keyframes hammer { from { opacity: 1; transform: rotate(-30deg); } to { opacity: 1; transform: rotate(20deg); } }
+.bld-game.react .btn-a, .bld-game.react .btn-b { animation: blink .3s steps(2) 6; }
+
+/* 放送局 */
+.waves path { opacity: 0; animation: wave 1.6s ease-out infinite; }
+@keyframes wave { 0% { opacity: 0; transform: translateY(6px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(-8px); } }
+.bld-tv.react .onair-box { fill: #ff2d55; }
+.bld-tv.react .onair-text { fill: #fff; }
+
+/* 郵便局 */
+.mail-flap { transform-box: fill-box; transform-origin: 50% 0; transition: transform .25s; }
+.bld-post.react .mail-flap { transform: scaleY(2.2); }
+.fly-letter { opacity: 0; }
+.bld-post.react .fly-letter { animation: flyletter 1.2s ease-in forwards; }
+@keyframes flyletter { 0% { opacity: 1; transform: translate(0, 0) rotate(0); } 60% { opacity: 1; transform: translate(-60px, -120px) rotate(-30deg); } 100% { opacity: 0; transform: translate(-90px, -200px) rotate(-60deg); } }
+
+/* 掲示板 */
+.paper { transform-box: fill-box; transform-origin: 50% 0; }
+.bld-board.react .paper-1 { animation: flutter .4s ease-in-out 3 alternate; }
+.bld-board.react .paper-2 { animation: fall 1.6s ease-in-out; }
+@keyframes flutter { from { transform: rotate(-8deg); } to { transform: rotate(6deg); } }
+@keyframes fall { 0% { transform: none; } 35% { transform: translate(10px, 70px) rotate(40deg); } 65% { transform: translate(10px, 70px) rotate(40deg); } 100% { transform: none; } }
+
+/* ---------- しかけ ---------- */
+.gimmick { cursor: pointer; }
+.cloud { transform-box: fill-box; transform-origin: 50% 50%; animation: drift 20s ease-in-out infinite alternate; }
+@keyframes drift { from { transform: translateX(-30px); } to { transform: translateX(30px); } }
+.cloud.poof { animation: poof 2.6s ease forwards; }
+@keyframes poof { 0% { transform: scale(1); opacity: 1; } 15% { transform: scale(1.3); opacity: 0; } 80% { transform: scale(.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.sun-rays { animation: spin 18s linear infinite; transform-box: fill-box; transform-origin: 50% 50%; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.shades { opacity: 0; transform: translateY(-30px); transition: .35s cubic-bezier(.3, 1.6, .5, 1); }
+.sun.cool .shades { opacity: 1; transform: none; }
+.sun.cool .sun-face { opacity: 0; }
+.sun.bounce { animation: bounce .4s ease; transform-box: fill-box; transform-origin: 50% 50%; }
+@keyframes bounce { 50% { transform: scale(1.15); } }
+.moon-wink { display: none; }
+.moon.wink .moon-eye { display: none; }
+.moon.wink .moon-wink { display: block; }
+.drops circle { opacity: 0; }
+.fountain.splash .drops circle { animation: splash .9s ease-out; }
+.fountain.splash .spout { animation: bounce .5s ease; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes splash { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(var(--dx), -40px); } }
+.tree .leaves { transform-box: fill-box; transform-origin: 50% 100%; }
+.tree.shake .leaves { animation: shake .5s ease-in-out; }
+@keyframes shake { 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+.flower .petals { transform-box: fill-box; transform-origin: 50% 50%; }
+.flower.twirl .petals { animation: spin .7s ease; }
+.cat-awake { display: none; }
+.cat.awake .cat-awake { display: block; }
+.cat.awake .cat-sleep { display: none; }
+.cat.awake { animation: bounce .4s ease; transform-box: fill-box; transform-origin: 50% 100%; }
+.zzz { animation: zzz 2s ease-in-out infinite; }
+@keyframes zzz { 0%, 100% { opacity: .2; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-5px); } }
+.balloon { animation: bob 3.2s ease-in-out infinite; transform-box: fill-box; }
+@keyframes bob { 50% { transform: translateY(-14px); } }
+.balloon.away { animation: away 3s ease-in forwards; }
+@keyframes away { 0% { transform: none; opacity: 1; } 70% { transform: translateY(-400px); opacity: 1; } 71% { opacity: 0; transform: translateY(-400px); } 100% { opacity: 1; transform: none; } }
+.blink { animation: blink 1.4s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .25; } }
+@keyframes twinkle { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+
+/* かくれぷにぃ */
+.hidden-punii { cursor: pointer; opacity: .9; transform-box: fill-box; transform-origin: 50% 100%; animation: peekaboo 4s ease-in-out infinite; }
+@keyframes peekaboo { 0%, 70%, 100% { transform: translateY(6px); } 80%, 90% { transform: translateY(-4px); } }
+.hidden-punii.found { animation: foundit .8s cubic-bezier(.3, 1.6, .5, 1) forwards; }
+@keyframes foundit { 0% { transform: scale(1); } 50% { transform: scale(1.8) translateY(-10px); } 100% { transform: scale(1.2); opacity: .55; } }
+
+/* ---------- ぷにぃ ---------- */
+.punii-walker { transition: transform 1.2s ease-in-out; }
+.punii-in { cursor: pointer; outline: none; }
+.punii-img { transform-box: fill-box; transform-origin: 50% 100%; animation: puniifloat 2.4s ease-in-out infinite; }
+@keyframes puniifloat { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-8px) rotate(3deg); } }
+.punii-in:hover .punii-img { animation-duration: .8s; }
+.punii-in:focus-visible .punii-shadow { fill: #ff9a1f; }
+.punii-walker.walking .punii-img { animation: puniiwalk .4s ease-in-out infinite; }
+@keyframes puniiwalk { 0%, 100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-10px) rotate(6deg); } }
+.punii-walker.flip .punii-img { scale: -1 1; }
+
+/* ふきだし（HTML） */
+.bubble {
+  position: absolute; z-index: 5; max-width: min(320px, 82vw); transform: translate(-50%, calc(-100% - 12px));
+  background: #fff; color: #2a2140; border: 3px solid #2a2140; border-radius: 20px; padding: 10px 14px;
+  box-shadow: 4px 4px 0 #2a2140; font-weight: 800; font-size: 15px; line-height: 1.6;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .25s cubic-bezier(.3, 1.6, .5, 1);
+}
+.bubble.show { opacity: 1; pointer-events: none; transform: translate(-50%, calc(-100% - 20px)); }
+.bubble::after {
+  content: ""; position: absolute; left: 50%; bottom: -12px; width: 18px; height: 18px; margin-left: -9px; background: #fff;
+  border-right: 3px solid #2a2140; border-bottom: 3px solid #2a2140; transform: rotate(45deg);
+}
+.bubble-btns { pointer-events: auto; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.bubble-btns button {
+  font: inherit; font-size: 13px; cursor: pointer; padding: 2px 10px; border-radius: 999px;
+  border: 2px solid #2a2140; background: #fff1dc; box-shadow: 2px 2px 0 #2a2140;
+}
+.bubble-btns button:hover { background: #ffd23f; }
+
+/* ---------- 町の下のボタン類 ---------- */
+.town-tools { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
+.tool-btn {
+  font-family: inherit; font-weight: 800; font-size: 14px; cursor: pointer; color: #2a2140;
+  padding: 6px 16px; border-radius: 999px; border: 3px solid #2a2140; background: #fff; box-shadow: 3px 3px 0 #2a2140;
+  transition: transform .15s;
+}
+.tool-btn:hover { transform: translateY(-2px); }
+.tool-btn:active { transform: translateY(2px); box-shadow: 1px 1px 0 #2a2140; }
+.tool-btn .count { color: #d86a00; }
+.town-hint { text-align: center; margin-top: 12px; font-weight: 800; color: #5d5575; font-size: 14px; }
+
+/* ---------- 建物の中（パネル） ---------- */
+.panel { margin: auto;
+  width: min(720px, calc(100vw - 24px)); max-height: calc(100vh - 40px); padding: 0; border: 4px solid #2a2140; border-radius: 28px;
+  box-shadow: 8px 8px 0 #2a2140; background: #fff; color: #2a2140; overflow: hidden;
+}
+.panel[open] { animation: panelin .45s cubic-bezier(.3, 1.5, .5, 1); }
+@keyframes panelin { from { opacity: 0; transform: scale(.6) translateY(40px); } to { opacity: 1; transform: none; } }
+.panel::backdrop { background: rgba(42, 33, 64, .45); backdrop-filter: blur(3px); }
+.panel-head { position: relative; display: flex; align-items: center; gap: 12px; padding: 16px 64px 14px 20px; color: #fff; border-bottom: 4px solid #2a2140; }
+.panel-head h2 { font-size: clamp(20px, 5vw, 26px); font-weight: 800; text-shadow: 2px 2px 0 rgba(42, 33, 64, .4); }
+.panel-head .panel-emoji { font-size: 30px; }
+.panel-close {
+  position: absolute; right: 14px; top: 50%; margin-top: -21px; width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+  border: 3px solid #2a2140; background: #fff; color: #2a2140; font-size: 22px; font-weight: 800; box-shadow: 2px 2px 0 #2a2140;
+}
+.panel-body { padding: 20px; overflow-y: auto; max-height: calc(100vh - 140px); }
+.panel-body > * + * { margin-top: 14px; }
+.panel-body .projects-grid { grid-template-columns: 1fr !important; gap: 16px; }
+.panel-body .project-card { transform: none !important; opacity: 1 !important; translate: none !important; }
+.panel-body .page-intro, .panel-body .department-note, .panel-body .about-story, .panel-body .about-principles { margin: 0; transform: none; }
+.panel-body .page-intro { padding: 0; text-align: left; }
+.panel-body .page-intro h1 { font-size: clamp(20px, 5vw, 26px); margin-top: 0; }
+.panel-body .page-intro p { margin-left: 0; }
+.panel-body .about-principles { padding: 20px; margin-top: 18px; }
+.panel-body .about-story img { max-width: 220px; }
+.panel-say { display: flex; align-items: center; gap: 10px; background: #fff1dc; border: 3px dashed #d86a00; border-radius: 18px; padding: 8px 12px; font-weight: 800; }
+.panel-say img { width: 46px; flex-shrink: 0; }
+.panel-foot { text-align: center; padding-top: 6px; }
+.panel.p-hq .panel-head { background: #ff9a1f; }
+.panel.p-ai .panel-head { background: #1fb8f0; }
+.panel.p-studio .panel-head { background: #a45cf0; }
+.panel.p-game .panel-head { background: #2ec27e; }
+.panel.p-tv .panel-head { background: #ff6fa5; }
+.panel.p-post .panel-head { background: #ff5a4f; }
+.panel.p-board .panel-head { background: #e8a33a; }
+.panel.p-stamp .panel-head { background: #a45cf0; }
+
+/* スタンプカード */
+.stamp-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.stamp {
+  aspect-ratio: 1; border: 3px dashed #c9c2dc; border-radius: 50%; display: grid; place-items: center; text-align: center;
+  font-size: 11px; font-weight: 800; color: #a29bb5; padding: 4px; line-height: 1.3;
+}
+.stamp.got { border: 3px solid #2a2140; color: #fff; animation: stampin .4s cubic-bezier(.3, 1.6, .5, 1); box-shadow: 2px 2px 0 #2a2140; }
+.stamp.got span { display: block; font-size: 22px; }
+@keyframes stampin { from { transform: scale(1.8) rotate(-20deg); opacity: 0; } to { transform: rotate(-8deg); opacity: 1; } }
+@media (max-width: 480px) { .stamp-grid { grid-template-columns: repeat(4, 1fr); } }
+
+/* 紙ふぶき */
+.confetti { position: fixed; top: -20px; width: 10px; height: 16px; z-index: 100; pointer-events: none; animation: confetti 2.6s linear forwards; }
+@keyframes confetti { to { transform: translateY(110vh) rotate(720deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .town *, .panel, .bubble { animation: none !important; transition: none !important; }
+}
+.town-sp .punii-walker { transition: transform .2s linear; }
+
+/* ---------- 島の町の小物 ---------- */
+.lamp-glow { opacity: 0; transition: opacity .6s; }
+body.t-night .lamp-glow, body.t-evening .lamp-glow { opacity: .75; }
+body.t-night .lamp-light { fill: #ffe066; }
+body.t-night .island-top, body.t-night .far { filter: brightness(.72) saturate(.9); }
+.mill-blades { animation: spin 6s linear infinite; }
+.ripple { animation: ripple 2.4s linear infinite; }
+@keyframes ripple { to { stroke-dashoffset: -72; } }
+.fall-lines { animation: ripple 1s linear infinite; }
+.birds { animation: birds 26s linear infinite; }
+@keyframes birds { from { transform: translateX(-900px); } to { transform: translateX(700px); } }
+.hot-balloon { animation: bob 5s ease-in-out infinite; transform-box: fill-box; }
+.hot-balloon.bounce, .stall.bounce, .train.bounce { animation: bounce .45s ease; transform-box: fill-box; transform-origin: 50% 100%; }
+
+/* ---------- 町 v2：レトロポップ ---------- */
+.town-retro { display: block !important; }
+.town text.r-jp { font-family: 'M PLUS Rounded 1c', sans-serif; font-weight: 800; }
+.town text.r-pop { font-family: 'Bungee', 'Baloo 2', sans-serif; font-weight: 400; }
+.town-retro .sky1 { stop-color: #e2703f; } .town-retro .sky2 { stop-color: #f6c27a; }
+body.t-morning .town-retro .sky1 { stop-color: #f0a07a; } body.t-morning .town-retro .sky2 { stop-color: #f9e2b8; }
+body.t-day .town-retro .sky1 { stop-color: #e2703f; } body.t-day .town-retro .sky2 { stop-color: #f6c27a; }
+body.t-evening .town-retro .sky1 { stop-color: #b8432f; } body.t-evening .town-retro .sky2 { stop-color: #ee9a5a; }
+body.t-night .town-retro .sky1 { stop-color: #1b1838; } body.t-night .town-retro .sky2 { stop-color: #4a3a6a; }
+body.t-night .town-retro .rwin, body.t-evening .town-retro .rwin { fill: #ffd76a; }
+.town-retro .bulb { animation: bulbs 1.2s steps(2) infinite; }
+.town-retro .bulb:nth-child(2n) { animation-delay: .6s; }
+@keyframes bulbs { 50% { fill: #fff6d0; } }
+.town-frame:has(.town-retro) { background: #e2703f; border-radius: 26px; }
+.town-retro .filler { filter: saturate(.55) brightness(1.04); opacity: .92; pointer-events: none; }
+body.t-night .town-retro .filler { filter: saturate(.5) brightness(.8); }
+
+/* ---------- スマホ：町を大きく表示して、横にスワイプして歩く ---------- */
+.swipe-hint { display: none; }
+@media (max-width: 719px) {
+  .town-frame { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .town-frame::-webkit-scrollbar { display: none; }
+  .town-frame .town-pc { width: 860px; max-width: none; }
+  .swipe-hint {
+    display: block; position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 4; pointer-events: none;
+    font-weight: 800; font-size: 14px; white-space: nowrap; color: #fbf3e2; background: rgba(35, 48, 74, .88);
+    padding: 6px 14px; border-radius: 999px; border: 2px solid #fbf3e2; transition: opacity .5s;
+    animation: swipehint 1.6s ease-in-out infinite;
+  }
+  .swipe-hint.hide { opacity: 0; }
+  @keyframes swipehint { 0%, 100% { margin-left: -8px; } 50% { margin-left: 8px; } }
+  .bubble { font-size: 14px; max-width: min(280px, 78vw); }
+}

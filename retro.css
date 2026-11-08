@@ -1,0 +1,134 @@
+/* レトロポップ（style.css の上にかぶせる）。読みやすさは白×ポップから：カードは明るく、スマホの見出しの影は弱く */
+:root {
+  --orange: #e86f3a;
+  --orange-d: #c4532a;
+  --orange-l: #f6dcc0;
+  --blue: #2f8f8a;
+  --blue-d: #21625f;
+  --blue-l: #d6ece6;
+  --purple: #7a5c9e;
+  --purple-d: #5f4680;
+  --purple-l: #e6dcef;
+  --yellow: #e0a93b;
+  --green: #5f9b6e;
+  --ink: #2b2440;
+  --ink-soft: #4f4560;
+  --white: #fbf3e2;
+  --pop: 'Bungee', 'M PLUS Rounded 1c', sans-serif;
+}
+
+/* 紙のざらざら＋網点 */
+html { background: #f3e6c8; }
+body {
+  background-color: #f3e6c8;
+  background-image:
+    radial-gradient(rgba(43, 36, 64, .12) 1.2px, transparent 1.3px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .14 0 0 0 0 .2 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 9px 9px, 160px 160px;
+}
+.bg .blob { display: none; }
+.spark { color: var(--yellow) !important; opacity: .6; }
+
+/* ヘッダー：紺のネオン看板 */
+.site-header { background: #23304a; border-bottom: 4px solid var(--ink); }
+.site-header nav a { background: #23304a; color: #fbf3e2 !important; border-color: #fbf3e2; box-shadow: 0 0 0 2px #23304a, 0 0 10px rgba(255, 233, 160, .35); font-family: var(--pop); font-weight: 400; letter-spacing: .06em; }
+.site-header nav a.c-blue { color: #6fe3ff !important; text-shadow: 0 0 6px #6fe3ff; }
+.site-header nav a.c-purple { color: #ff9fd2 !important; text-shadow: 0 0 6px #ff6f91; }
+.site-header nav a.c-orange { color: #ffd76a !important; text-shadow: 0 0 6px #ffd76a; }
+.site-header nav a.nav-contact { background: var(--orange); color: #fbf3e2 !important; }
+.site-header nav a[aria-current="page"] { background: #fbf3e2; color: #23304a !important; text-shadow: none; }
+.menu-btn { background: var(--yellow); }
+
+/* ページの見出し：夕焼けの帯＋遠くのビル */
+.page-intro {
+  position: relative; margin: 0 -16px; padding: 46px 16px 64px; color: #fbf3e2;
+  background: linear-gradient(#d9603a, #f2a15c 75%, #f6c27a);
+  border-bottom: 4px solid var(--ink);
+}
+.page-intro::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 46px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='46'%3E%3Cpath d='M0 46V20h20V8h18v14h14V0h22v18h16V12h20v20h18V6h26v16h14V14h18v32z' fill='%23b8604a' opacity='.75'/%3E%3C/svg%3E") repeat-x bottom/240px 46px;
+}
+.page-intro h1 { color: #fbf3e2; text-shadow: 3px 3px 0 var(--ink); }
+.page-intro p { color: #fff6e6 !important; }
+.page-intro .eyebrow { font-family: var(--pop); font-weight: 400; background: #23304a !important; color: #ffd76a; border-color: #fbf3e2; box-shadow: 0 0 10px rgba(255, 215, 106, .5); }
+
+/* 部署のメモ：しましまの札 */
+.department-note { background: repeating-linear-gradient(45deg, #fbf3e2 0 10px, #efe1bf 10px 20px) !important; border-width: 2px; box-shadow: 4px 4px 0 #23304a; transform: rotate(-.6deg); }
+
+/* カード：電球で囲まれた看板 */
+.project-card {
+  background: #fbf3e2; border: 2px solid var(--ink); border-radius: 10px; box-shadow: 6px 6px 0 #23304a;
+  outline: 6px solid #23304a; outline-offset: -12px;
+}
+.project-card::before { display: none; }
+.project-card::after {
+  content: ""; position: absolute; inset: 3px; border-radius: 8px; pointer-events: none;
+  background:
+    radial-gradient(circle, #ffe9a0 2.6px, transparent 3px) top left/16px 16px repeat-x,
+    radial-gradient(circle, #ffe9a0 2.6px, transparent 3px) bottom left/16px 16px repeat-x;
+}
+.project-card h3 { font-weight: 800; color: var(--ink); }
+.project-card .card-top, .project-card h3, .project-card p, .project-card .card-bottom { position: relative; z-index: 1; padding: 0 10px; }
+.project-card .card-top { padding-top: 10px; }
+.project-card .card-bottom { padding-bottom: 8px; }
+.project-dept { font-family: var(--pop); font-weight: 400; }
+.status { border-radius: 4px; font-weight: 800; }
+.status-3 { background: #5f9b6e; }
+.status-2 { background: var(--yellow); }
+.status-1 { background: var(--orange); }
+.card-link { border-radius: 4px; font-family: var(--pop); font-weight: 400; letter-spacing: .03em; }
+.project-card.ai .card-link { background: var(--blue); }
+
+/* 相談の帯：ネオンの看板 */
+.contact-strip.ai, .contact-strip.creative { background: #23304a !important; border-radius: 14px; box-shadow: 7px 7px 0 var(--orange); }
+.contact-strip h2 { font-family: 'M PLUS Rounded 1c', sans-serif; color: #ffd76a; text-shadow: 0 0 10px rgba(255, 215, 106, .7); }
+.contact-strip p { color: #fbf3e2; }
+.button { background: var(--orange); border-radius: 6px; font-family: var(--pop); font-weight: 400; letter-spacing: .04em; }
+
+/* フッター：タイルの歩道 */
+.site-footer { background: repeating-linear-gradient(90deg, #cfa47c 0 14px, #b98a62 14px 16px), #cfa47c; border-top: 4px solid var(--ink); }
+.footer-brand p { color: #23304a; }
+.footer-links a { background: #fbf3e2; border-radius: 4px; }
+.copyright { color: #23304a; }
+
+/* ---------- 読みやすさ（白×ポップから） ---------- */
+/* カードの背景を明るく */
+.project-card, .news-list details, .form-box, .about-story, .profile, .sticker-white { background: #fffdf6 !important; }
+.department-note { background: repeating-linear-gradient(45deg, #fffdf6 0 10px, #f6ecd6 10px 20px) !important; }
+.project-description, .department-note p, .profile p, .about-story p, .news-list details p { color: #3a3150 !important; }
+
+/* スマホでは見出しの文字の影を弱く */
+@media (max-width: 719px) {
+  .page-intro h1 { text-shadow: 1.5px 1.5px 0 rgba(43, 36, 64, .55); }
+  .contact-strip h2 { text-shadow: 0 0 5px rgba(255, 215, 106, .45); }
+  .entrance h2 { text-shadow: 2px 2px 0 var(--ink); -webkit-text-stroke: 1px var(--ink); }
+}
+
+/* ---------- HOME・ABOUT・CONTACT の部品もレトロポップに ---------- */
+.entrance.ai { background: linear-gradient(140deg, #3aa6a0, #21625f); border-radius: 14px; }
+.entrance.creative { background: linear-gradient(140deg, #9a7cc0, #5f4680); border-radius: 14px; }
+.entrance-index, .eyebrow { font-family: var(--pop); font-weight: 400; }
+.section-heading .eyebrow, .about-strip .eyebrow, .about-principles .eyebrow { background: #23304a; color: #ffd76a; border-color: #23304a; }
+.section-heading h2::after { filter: hue-rotate(-10deg) saturate(.8); }
+.news-list details { border-radius: 10px; box-shadow: 4px 4px 0 #23304a; }
+.news-list time { background: var(--purple); }
+.about-strip, .about-principles, .cta-box { background: repeating-linear-gradient(45deg, #fbe7cf 0 12px, #f6dcc0 12px 24px) !important; border-radius: 14px; box-shadow: 7px 7px 0 #23304a; }
+.about-story, .profile, .form-box, .contact-other { border-radius: 12px; box-shadow: 6px 6px 0 #23304a; }
+.profile.ai { background: #eef7f4 !important; } .profile.creative { background: #f3eef8 !important; }
+.contact-other { background: #f3eef8; }
+.notice { background: #fbe7cf; }
+.home-hero h1 { text-shadow: 2px 2px 0 rgba(43, 36, 64, .15); }
+.chip { border-radius: 6px; }
+
+/* スマホ：見出しの文字とビルのシルエットが重ならないように */
+@media (max-width: 719px) {
+  .page-intro { padding-bottom: 70px; }
+  .page-intro::after { height: 34px; background-size: 180px 34px; }
+}
+
+/* 建物の中（パネル）の見出し：夕焼けの帯は残して、文字とビルが重ならないように */
+.panel-body .page-intro { margin: 0 0 14px !important; padding: 16px 18px 52px !important; border-radius: 10px; border: 2px solid var(--ink); text-align: left; overflow: hidden; }
+.panel-body .page-intro::after { height: 30px; background-size: 170px 30px; border-radius: 0 0 8px 8px; }
+.panel-body .page-intro h1 { margin-top: 10px !important; }
+.panel-body .page-intro p { margin: 8px 0 0; }
