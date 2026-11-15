@@ -92,12 +92,16 @@ if (form) {
         .filter((it) => it.d && it.title)
         .sort((a, b) => (a.d.key < b.d.key ? 1 : -1));
       if (!items.length) return;
-      const html = items.map((it) => {
-        const link = /^https?:\/\//.test(it.link) ? ` <a href="${esc(it.link)}" target="_blank" rel="noopener noreferrer">→ 詳しく見る</a>` : '';
-        return `<details><summary><time>${esc(it.d.show)}</time><span>${esc(it.title)}</span><b>＋</b></summary>` +
-               `<p>${esc(it.body).replace(/\n/g, '<br>')}${link}</p></details>`;
-      }).join('');
-      lists.forEach((l) => { l.innerHTML = html; });
+      lists.forEach((l) => {
+        // サイトに直接書いた「固定のお知らせ」（data-pinned）は残して、シートのお知らせとまぜて日付順に
+        const pinned = [...l.querySelectorAll('details[data-pinned]')].map((el) => ({ key: el.dataset.pinned, html: el.outerHTML }));
+        const rows = items.map((it) => {
+          const link = /^https?:\/\//.test(it.link) ? ` <a href="${esc(it.link)}" target="_blank" rel="noopener noreferrer">→ 詳しく見る</a>` : '';
+          return { key: it.d.key, html: `<details><summary><time>${esc(it.d.show)}</time><span>${esc(it.title)}</span><b>＋</b></summary>` +
+                   `<p>${esc(it.body).replace(/\n/g, '<br>')}${link}</p></details>` };
+        });
+        l.innerHTML = pinned.concat(rows).sort((a, b) => (a.key < b.key ? 1 : a.key > b.key ? -1 : 0)).map((x) => x.html).join('');
+      });
     })
     .catch(() => { /* 読みこめないときは、書いてあるお知らせのまま */ });
 })();
